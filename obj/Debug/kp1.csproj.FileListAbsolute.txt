@@ -1,0 +1,7 @@
+C:\Users\Lenovo\source\repos\kp1\kp1\bin\Debug\kp1.exe.config
+C:\Users\Lenovo\source\repos\kp1\kp1\bin\Debug\kp1.exe
+C:\Users\Lenovo\source\repos\kp1\kp1\bin\Debug\kp1.pdb
+C:\Users\Lenovo\source\repos\kp1\kp1\obj\Debug\kp1.csprojAssemblyReference.cache
+C:\Users\Lenovo\source\repos\kp1\kp1\obj\Debug\kp1.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\kp1\kp1\obj\Debug\kp1.exe
+C:\Users\Lenovo\source\repos\kp1\kp1\obj\Debug\kp1.pdb

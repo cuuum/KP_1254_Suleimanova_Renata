@@ -122,33 +122,40 @@ namespace kp1
                 Gen(Type.LowLetter, flags[2] - kol);
             }
 
+            // добираем всем подряд
+
             int ostatok = flags[0] - ans.Count;
+            List<Type> types = new List<Type>();
 
             if (flags[4] != 0)
             {
-                int kol = rand.Next(ostatok + 1);
-                Gen(Type.Special, kol);
-                ostatok -= kol;
+                types.Add(Type.Special);
             }
 
             if (flags[1] == -1)
             {
-                int kol = rand.Next(ostatok + 1);
-                Gen(Type.Digit, kol);
-                ostatok -= kol;
+                types.Add(Type.Digit);
             }
 
             if (flags[2] == -1)
             {
-                int kol = rand.Next(ostatok + 1);
-                Gen(Type.LowLetter, kol);
-                ostatok -= kol;
+                types.Add(Type.LowLetter);
+                if (flags[3] != 0)
+                {
+                    types.Add(Type.UpperLetter);
+                }
             }
 
-            if (flags[3] != 0)
+            if (ostatok != 0 && types.Count == 0)
             {
-                Gen(Type.UpperLetter, ostatok);
+                BadEnd();
+                return;
             }
+
+            for(int i = 0; i < ostatok; ++i)
+            {
+                Gen(types[rand.Next(types.Count)], 1);
+            }            
 
             //for(int i = 0; i < ans.Count; ++i)
             //{

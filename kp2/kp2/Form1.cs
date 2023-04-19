@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace kp2
 {
     public partial class Form1 : Form
@@ -17,12 +18,15 @@ namespace kp2
 
         List<TestResult> results = new List<TestResult>(100);
 
+        // разделитель для ответов на 2 вопрос
+        char sep = '$';
+
         public Form1()
         {
             InitializeComponent();
 
             // задаем авто - ответы
-            List<string> autoAns = new List<string> { radioButton1.Text, checkBox1.Text + '\n' + checkBox2.Text, comboBox2.Items[0].ToString(), "10", "Здесь могла бы быть ваша реклама" };
+            List<string> autoAns = new List<string> { radioButton1.Text, checkBox1.Text + sep + checkBox2.Text, comboBox2.Items[0].ToString(), "10", "Здесь могла бы быть ваша реклама" };
             autoTestRes = new TestResult("Василий", "Смагин", "0", "1254", autoAns);
 
             bufferAns = autoAns;
@@ -52,10 +56,12 @@ namespace kp2
             // 2
             foreach (var i in new List<CheckBox> { checkBox1, checkBox2, checkBox3, checkBox4 })
             {
+
+
+                //Console.WriteLine(i.Text);
                 if (i.Checked)
                 {
-                    bufferAns[1] += i.Text + '\n';
-                    break;
+                    bufferAns[1] += i.Text + sep;
                 }
             }
 
@@ -98,7 +104,7 @@ namespace kp2
 
             // 2
 
-            var ansSecondQuest = ans.Answers[1].Split('\n');
+            var ansSecondQuest = ans.Answers[1].Split(sep);
 
             foreach (var box in new List<CheckBox> { checkBox1, checkBox2, checkBox3, checkBox4 })
             {
@@ -173,12 +179,39 @@ namespace kp2
             }
         }
 
+        // изменился выбор в листбоксе
         private void listBox1_SelectedValueChanged(object sender, EventArgs e)
         {
             Set_Ans(results[listBox1.SelectedIndex]);
         }
 
+        // нажали сохранить в файл
+        private void button4_Click(object sender, EventArgs e)
+        {
+            TestResult.Clear_File("out.json");
+            foreach (var i in results) i.SaveToFile("out.json");
+        }
 
+        // нажали загрузить файл
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = openFileDialog1.FileName;
 
+                foreach (var i in TestResult.ReadFile(filePath))
+                {
+                    results.Add(i);
+                }
+
+                Update_ListBox();
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            results.Clear();
+            Update_ListBox();
+        }
     }
 }

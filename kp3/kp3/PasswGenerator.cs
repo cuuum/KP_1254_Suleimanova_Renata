@@ -19,8 +19,6 @@ namespace kp3
             if (isAlf) args += $"--letters={alfLen} ";
             if (isNum) args += $"--digits={numLen} ";
 
-            Console.WriteLine(args);
-
             return RunApp(args);
         }
 
@@ -50,7 +48,6 @@ namespace kp3
 
             // Дождаемся окончания работы приложения и выходим
             process.WaitForExit();
-            Console.WriteLine("Dct rhenj");
             return output;
         }
     }

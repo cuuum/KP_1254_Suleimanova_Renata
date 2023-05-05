@@ -12,11 +12,29 @@ namespace kp3
 {
     public partial class Form1 : Form
     {
-        List<Account> accouts = new List<Account>(100);
+        Account.Permissions baseUserType;
 
-        public Form1()
+        string mode = "Make";
+        int indRedAcc = -1;
+
+        Account baseAcc;
+
+
+        public Form1(Account acc)
         {
+            baseAcc = acc;
+            baseUserType = baseAcc.UserType;
             InitializeComponent();
+
+
+            if ((baseUserType & Account.Permissions.EditOther | (baseUserType & Account.Permissions.EditSelf)) == 0)
+            {
+                // спрятали кнопки редактирования
+                button3.Visible = false;
+                button4.Visible = false;
+            }
+
+            redrawAccs();
         }
 
 
@@ -29,9 +47,28 @@ namespace kp3
         private void redrawAccs()
         {
             listBox1.Items.Clear();
-            for(int i = 0; i < accouts.Count; ++i)
+
+
+            if ((baseUserType & Account.Permissions.ViewUsers) == 0) return ;
+
+            int ind = 0;
+            
+
+            Console.WriteLine(baseUserType.ToString());
+
+            foreach(var i  in AccountsData.accounts)
             {
-                listBox1.Items.Insert(listBox1.Items.Count, $"User_{i + 1} {accouts[i].ToString()}");
+                ++ind;
+                if (((i.UserType & Account.Permissions.Admin) == 0) || (((i.UserType & Account.Permissions.Admin) != 0) && ((baseUserType & Account.Permissions.ViewAdmins) != 0)))
+                {
+                    var data = $"{ind}. {i.ToString()}";
+
+                    if ((baseUserType & Account.Permissions.ViewLogins) != 0) data += " " + i.Login;
+
+                    if ((baseUserType & Account.Permissions.ViewPasswords) != 0) data += " " + i.Password;
+
+                    listBox1.Items.Add(data);
+                }
             }
         }
 
@@ -45,10 +82,14 @@ namespace kp3
             string password = textBox4.Text;
             DateTime date = dateTimePicker1.Value;
 
-            Account acc = new Account(name, sername, login, password, date, SayAboutError);
+            Account acc = new Account(name, sername, login, password, date, Account.Permissions.CommonUser, SayAboutError);
+
             if (acc.CheckIsValid())
             {
-                accouts.Add(acc);
+                if (mode == "Make") AccountsData.accounts.Add(acc);
+                else  AccountsData.accounts[indRedAcc] = acc;
+
+                AccountsData.Update();
                 redrawAccs();
             }
 
@@ -64,6 +105,67 @@ namespace kp3
         private void button1_Click(object sender, EventArgs e)
         {
             textBox4.Text = PasswGenerator.Generate((int)numericUpDown1.Value, checkBox1.Checked, checkBox2.Checked, checkBox3.Checked, checkBox4.Checked, (int)numericUpDown2.Value, (int)numericUpDown3.Value);
+        }
+
+
+        // при закрытии формы хотим сохранить данные в файл
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            AccountsData.Save();
+        }
+
+
+        // хотим изменить аккаунт
+        private void button3_Click(object sender, EventArgs e)
+        {
+            indRedAcc = int.Parse(listBox1.SelectedItem.ToString().Split('.')[0]) - 1;
+
+            // Добавить условие что если можно редактировать только свой акк, выбран ли правильный
+            if ((baseUserType & Account.Permissions.EditOther) == 0)
+            {
+                if (AccountsData.accounts[indRedAcc] != baseAcc)
+                {
+                    MessageBox.Show("Недостаточно прав");
+                    return;
+                }
+            }
+
+            mode = "Red";
+
+            SetAns();
+        }
+
+        private void SetAns()
+        {
+            if (indRedAcc == -1) return ;
+            Account acc = AccountsData.accounts[indRedAcc];
+            textBox1.Text = acc.Name;
+            textBox2.Text = acc.Sername;
+            textBox3.Text = acc.Login;
+            textBox4.Text = acc.Password;
+            dateTimePicker1.Value = acc.DateOfBirth;
+        }
+
+        // удалить
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int checkedInd = int.Parse(listBox1.SelectedItem.ToString().Split('.')[0]) - 1;
+
+            if ((baseUserType & Account.Permissions.EditOther) == 0)
+            {
+                if (AccountsData.accounts[indRedAcc] != baseAcc)
+                {
+                    MessageBox.Show("Недостаточно прав");
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Вы уверены, что хотите удалить свой аккаунт?....");
+                }
+            }
+
+            AccountsData.accounts.Remove(AccountsData.accounts[checkedInd]);
+            redrawAccs();
         }
     }
 }

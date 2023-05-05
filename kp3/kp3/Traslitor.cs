@@ -25,6 +25,13 @@ namespace kp3
                 var a = str[1].Trim();
                 var b = str[2].Trim();
                 dictTrans[a] = b;
+
+                // Создаем заглавную версию алфавита
+
+                a = Char.ToUpper(a[0]) + "";
+                if (b.Count() > 0) b = Char.ToUpper(b[0]) + b.Substring(1);
+                dictTrans[a] = b;
+
             }
 
         }

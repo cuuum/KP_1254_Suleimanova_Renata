@@ -28,7 +28,7 @@ namespace kp3
             // Создание объекта для запуска внешнего приложения
             Process process = new Process();
 
-            process.StartInfo.FileName = "kp1.exe";                  // указание пути к файлу запускаемой программы
+            process.StartInfo.FileName = "source/kp1.exe";                  // указание пути к файлу запускаемой программы
             process.StartInfo.Arguments = args;                // передача аргументов запускаемой программы
             process.StartInfo.UseShellExecute = false;          // false требуется, чтобы можно было читать из вывода запущенного приложения
             process.StartInfo.RedirectStandardOutput = true;    // true требуется, чтобы можно было читать из стандартного вывода запущенного приложения

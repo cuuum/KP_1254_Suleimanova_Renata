@@ -16,7 +16,7 @@ namespace kp3
 
         static Traslitor()
         {
-            var data = File.ReadAllText("dictionary.txt");
+            var data = File.ReadAllText("source/dictionary.txt");
 
             foreach (var i in data.Split('\n'))
             {

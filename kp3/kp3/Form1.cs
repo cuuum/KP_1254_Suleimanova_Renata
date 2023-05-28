@@ -23,7 +23,11 @@ namespace kp3
         public Form1(Account acc)
         {
             baseAcc = acc;
-            baseUserType = baseAcc.UserType;
+            if (acc == null)
+            {
+                baseUserType = Account.Permissions.Guest;
+            }
+            else baseUserType = baseAcc.UserType;
             InitializeComponent();
 
 

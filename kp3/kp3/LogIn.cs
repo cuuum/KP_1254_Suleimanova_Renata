@@ -26,7 +26,7 @@ namespace kp3
 
             Account acc = AccountsData.GetAcc(login, password, (message) => MessageBox.Show(message));
 
-            if (acc.UserType != Account.Permissions.None)
+            if (acc != null)
             {
                 (new Form1(acc)).ShowDialog();
             }

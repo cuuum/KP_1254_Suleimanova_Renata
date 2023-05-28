@@ -16,17 +16,17 @@ namespace kp3
 
         static AccountsData()
         {
-            if (!File.Exists("accountsData.txt"))
-                File.Create("accountsData.txt");
+            if (!File.Exists("source/accountsData.txt"))
+                File.Create("source/accountsData.txt");
 
-            var accountsData = File.ReadAllText("accountsData.txt");
+            var accountsData = File.ReadAllText("source/accountsData.txt");
 
 
 
-            if (!File.Exists("accountsPrivateData.txt"))
-                File.Create("accountsPrivateData.txt");
+            if (!File.Exists("source/accountsPrivateData.txt"))
+                File.Create("source/accountsPrivateData.txt");
 
-            var accountsPrivateData = File.ReadAllText("accountsPrivateData.txt");
+            var accountsPrivateData = File.ReadAllText("source/accountsPrivateData.txt");
 
             
 
@@ -121,8 +121,8 @@ namespace kp3
                 privateData += i.Login + " " + i.Password + "\n";
             }
 
-            File.WriteAllText("accountsData.txt", allData);
-            File.WriteAllText("accountsPrivateData.txt", privateData);
+            File.WriteAllText("source/accountsData.txt", allData);
+            File.WriteAllText("source/accountsPrivateData.txt", privateData);
         }
 
     }

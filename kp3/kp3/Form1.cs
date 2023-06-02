@@ -122,16 +122,15 @@ namespace kp3
         // хотим изменить аккаунт
         private void button3_Click(object sender, EventArgs e)
         {
+            if (listBox1.SelectedItem == null) return;
+
+
             indRedAcc = int.Parse(listBox1.SelectedItem.ToString().Split('.')[0]) - 1;
 
-            // Добавить условие что если можно редактировать только свой акк, выбран ли правильный
-            if ((baseUserType & Account.Permissions.EditOther) == 0)
+            if ((baseUserType & Account.Permissions.EditOther) == 0 && AccountsData.accounts[indRedAcc] != baseAcc)
             {
-                if (AccountsData.accounts[indRedAcc] != baseAcc)
-                {
-                    MessageBox.Show("Недостаточно прав");
-                    return;
-                }
+                MessageBox.Show("Недостаточно прав");
+                return;
             }
 
             mode = "Red";
@@ -170,6 +169,24 @@ namespace kp3
 
             AccountsData.accounts.Remove(AccountsData.accounts[checkedInd]);
             redrawAccs();
+        }
+
+        // добавление пользователя
+        private void button5_Click(object sender, EventArgs e)
+        {
+            mode = "Make";
+            indRedAcc = -1;
+            SetZeroAns();
+        }
+
+
+        private void SetZeroAns()
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+            dateTimePicker1.Value = DateTime.Now;
         }
     }
 }

@@ -33,13 +33,14 @@ namespace kp3
 
             foreach (var i in accountsPrivateData.Split('\n'))
             {
-                var data = i.Split(' ');
+                var data = i.Split('\n')[0].Split(' ');
                 if (data.Count() < 2) continue;
+
                 logPasw[data[0]] = data[1];
             }
 
 
-            foreach(var i in accountsData.Split('\n'))
+            foreach (var i in accountsData.Split('\n'))
             {
                 var data = i.Split(' ');
 
